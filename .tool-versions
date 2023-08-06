@@ -1,4 +1,4 @@
-golang 1.20.6
+golang 1.20.7
 goreleaser 1.19.2
-task 3.27.1
-act 0.2.48
+task 3.28.0
+act 0.2.49
