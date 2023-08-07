@@ -6,7 +6,7 @@ Helper tool for [rtx](https://github.com/jdxcode/rtx).
 
 ## Installation
 
-asdf-helper can be installed via [asdf](https://asdf-vm.com/). See https://github.com/ngyewch/asdf-helper-plugin
+rtx-helper can be installed via [rtx](https://github.com/jdxcode/rtx). See https://github.com/ngyewch/rtx-helper-plugin
 
 ## Features
 
@@ -22,10 +22,11 @@ rtx-helper install
 rtx-helper latest
 ```
 
-Version constraints can be specified in `.tool-versions`. See https://github.com/Masterminds/semver for more details.
+Version constraints can be specified in `.rtx-helper.toml`. See https://github.com/Masterminds/semver for more details.
 
 ```
-nodejs 16.17.1 # (constraint ^16)
-java openjdk-11.0.2 # (constraint ^11)
-golang 1.17.13 # (constraint >= 1.17, < 1.19)
+[constraints]
+nodejs = '^16'
+java = '^11'
+golang = '>= 1.17, < 1.19'
 ```
