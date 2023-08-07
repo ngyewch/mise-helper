@@ -1,4 +1,4 @@
-package helper
+package rtx
 
 import (
 	"github.com/stretchr/testify/assert"

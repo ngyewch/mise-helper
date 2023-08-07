@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func walkDirectories(handler func(rtxHelper *rtx.Helper, path string) error) error {
+func walkDirectories(handler func(rtxHelper *rtx.Helper, rtxDirHelper *rtx.DirHelper, path string) error) error {
 	ignore, err := gitignore.NewRepository(".")
 	if err != nil {
 		return err
@@ -33,12 +33,13 @@ func walkDirectories(handler func(rtxHelper *rtx.Helper, path string) error) err
 			}
 		}
 		if info.IsDir() {
-			f, err := hasConfigFiles(path)
+			f, err := helper.HasVersionFiles(path)
 			if err != nil {
 				return err
 			}
 			if f {
-				err = handler(helper, path)
+				dirHelper := rtx.NewDirHelper(path)
+				err = handler(helper, dirHelper, path)
 				if err != nil {
 					return err
 				}
@@ -50,20 +51,4 @@ func walkDirectories(handler func(rtxHelper *rtx.Helper, path string) error) err
 		return err
 	}
 	return nil
-}
-
-func hasConfigFiles(path string) (bool, error) {
-	_, err := os.Stat(filepath.Join(path, ".rtx.toml"))
-	if err == nil {
-		return true, nil
-	} else if !os.IsNotExist(err) {
-		return false, err
-	}
-	_, err = os.Stat(filepath.Join(path, ".tool-versions"))
-	if err == nil {
-		return true, nil
-	} else if !os.IsNotExist(err) {
-		return false, err
-	}
-	return false, nil
 }

@@ -14,7 +14,7 @@ type Config struct {
 }
 
 func Latest(hideLatest bool, includePrereleases bool) error {
-	return walkDirectories(func(rtxHelper *rtx.Helper, path string) error {
+	return walkDirectories(func(rtxHelper *rtx.Helper, rtxDirHelper *rtx.DirHelper, path string) error {
 		fmt.Println(path)
 		absPath, err := filepath.Abs(path)
 		if err != nil {
@@ -24,7 +24,7 @@ func Latest(hideLatest bool, includePrereleases bool) error {
 		if err != nil {
 			return err
 		}
-		response, err := rtxHelper.ListInstalled(path)
+		response, err := rtxDirHelper.ListInstalled()
 		if err != nil {
 			return err
 		}
@@ -40,16 +40,15 @@ func Latest(hideLatest bool, includePrereleases bool) error {
 				}
 			}
 			if matchedListing != nil {
-				toolVersion := NewToolVersion(matchedListing.RequestedVersion)
+				toolVersion := rtx.NewToolVersion(matchedListing.RequestedVersion)
 				availableVersions, err := rtxHelper.ListAvailable(toolName)
 				if err != nil {
 					return err
 				}
 				if toolVersion.Valid() {
-					var latestToolVersion *ToolVersion
+					var latestToolVersion *rtx.ToolVersion
 					for _, availableVersion := range availableVersions {
-						tv := NewToolVersion(availableVersion)
-						if tv.Valid() && (toolVersion.VersionPrefix == tv.VersionPrefix) && (includePrereleases || tv.SemVer.Prerelease() == "") {
+						if availableVersion.Valid() && (toolVersion.VersionPrefix == availableVersion.VersionPrefix) && (includePrereleases || availableVersion.SemVer.Prerelease() == "") {
 							var constraints *semver.Constraints
 							if config != nil && config.Constraints != nil {
 								constraintsStr, ok := config.Constraints[toolName]
@@ -60,9 +59,9 @@ func Latest(hideLatest bool, includePrereleases bool) error {
 									}
 								}
 							}
-							if (constraints == nil) || constraints.Check(tv.SemVer) {
-								if tv.SemVer.GreaterThan(toolVersion.SemVer) {
-									latestToolVersion = tv
+							if (constraints == nil) || constraints.Check(availableVersion.SemVer) {
+								if availableVersion.SemVer.GreaterThan(toolVersion.SemVer) {
+									latestToolVersion = availableVersion
 								}
 							}
 						}

@@ -6,9 +6,9 @@ import (
 )
 
 func Install() error {
-	return walkDirectories(func(rtxHelper *rtx.Helper, path string) error {
+	return walkDirectories(func(rtxHelper *rtx.Helper, rtxDirHelper *rtx.DirHelper, path string) error {
 		fmt.Println(path)
-		err := rtxHelper.InstallAll(path)
+		err := rtxDirHelper.InstallAll()
 		if err != nil {
 			return err
 		}

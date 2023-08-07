@@ -1,4 +1,4 @@
-package helper
+package rtx
 
 import (
 	"github.com/Masterminds/semver/v3"
