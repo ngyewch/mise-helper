@@ -5,8 +5,8 @@ import (
 	"github.com/ngyewch/rtx-helper/rtx"
 )
 
-func Install() error {
-	return walkDirectories(func(rtxHelper *rtx.Helper, rtxDirHelper *rtx.DirHelper, path string) error {
+func Install(recursive bool) error {
+	return walkDirectories(recursive, func(rtxHelper *rtx.Helper, rtxDirHelper *rtx.DirHelper, path string) error {
 		fmt.Println(path)
 		err := rtxDirHelper.InstallAll()
 		if err != nil {

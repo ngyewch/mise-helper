@@ -13,8 +13,8 @@ type Config struct {
 	Constraints map[string]string
 }
 
-func Latest(hideLatest bool, includePrereleases bool) error {
-	return walkDirectories(func(rtxHelper *rtx.Helper, rtxDirHelper *rtx.DirHelper, path string) error {
+func Latest(hideLatest bool, includePrereleases bool, recursive bool) error {
+	return walkDirectories(recursive, func(rtxHelper *rtx.Helper, rtxDirHelper *rtx.DirHelper, path string) error {
 		fmt.Println(path)
 		absPath, err := filepath.Abs(path)
 		if err != nil {

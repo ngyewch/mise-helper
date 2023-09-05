@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func walkDirectories(handler func(rtxHelper *rtx.Helper, rtxDirHelper *rtx.DirHelper, path string) error) error {
+func walkDirectories(recursive bool, handler func(rtxHelper *rtx.Helper, rtxDirHelper *rtx.DirHelper, path string) error) error {
 	ignore, err := gitignore.NewRepository(".")
 	if err != nil {
 		return err
@@ -21,6 +21,9 @@ func walkDirectories(handler func(rtxHelper *rtx.Helper, rtxDirHelper *rtx.DirHe
 	err = filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
+		}
+		if !recursive && (path != ".") && info.IsDir() {
+			return filepath.SkipDir
 		}
 		match := ignore.Relative(path, info.IsDir())
 		if match != nil {
