@@ -3,7 +3,7 @@ package helper
 import (
 	"fmt"
 	"github.com/Masterminds/semver/v3"
-	"github.com/ngyewch/rtx-helper/rtx"
+	"github.com/ngyewch/mise-helper/mise"
 	"github.com/pelletier/go-toml"
 	"os"
 	"path/filepath"
@@ -14,22 +14,22 @@ type Config struct {
 }
 
 func Latest(hideLatest bool, includePrereleases bool, recursive bool) error {
-	return walkDirectories(recursive, func(rtxHelper *rtx.Helper, rtxDirHelper *rtx.DirHelper, path string) error {
+	return walkDirectories(recursive, func(miseHelper *mise.Helper, miseDirHelper *mise.DirHelper, path string) error {
 		fmt.Println(path)
 		absPath, err := filepath.Abs(path)
 		if err != nil {
 			return err
 		}
-		config, err := ReadConfig(filepath.Join(path, ".rtx-helper.toml"))
+		config, err := ReadConfig(filepath.Join(path, ".mise-helper.toml"))
 		if err != nil {
 			return err
 		}
-		response, err := rtxDirHelper.ListInstalled()
+		response, err := miseDirHelper.ListInstalled()
 		if err != nil {
 			return err
 		}
 		for toolName, listings := range *response {
-			var matchedListing *rtx.Listing
+			var matchedListing *mise.Listing
 			for _, listing := range listings {
 				if listing.Source != nil {
 					dir := filepath.Dir(listing.Source.Path)
@@ -40,14 +40,14 @@ func Latest(hideLatest bool, includePrereleases bool, recursive bool) error {
 				}
 			}
 			if matchedListing != nil {
-				toolVersion := rtx.NewToolVersion(matchedListing.RequestedVersion)
-				availableVersions, err := rtxHelper.ListAvailable(toolName)
+				toolVersion := mise.NewToolVersion(matchedListing.RequestedVersion)
+				availableVersions, err := miseHelper.ListAvailable(toolName)
 				if err != nil {
 					return err
 				}
 				if toolVersion.Valid() {
 					matchedAvailableVersion := false
-					var latestToolVersion *rtx.ToolVersion
+					var latestToolVersion *mise.ToolVersion
 					for _, availableVersion := range availableVersions {
 						if matchedListing.RequestedVersion == availableVersion.Version {
 							matchedAvailableVersion = true

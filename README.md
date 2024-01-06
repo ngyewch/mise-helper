@@ -1,28 +1,28 @@
-# rtx-helper
+# mise-helper
 
-[![Build](https://github.com/ngyewch/rtx-helper/actions/workflows/build.yml/badge.svg)](https://github.com/ngyewch/rtx-helper/actions/workflows/build.yml)
+[![Build](https://github.com/ngyewch/mise-helper/actions/workflows/build.yml/badge.svg)](https://github.com/ngyewch/mise-helper/actions/workflows/build.yml)
 
-Helper tool for [rtx](https://github.com/jdxcode/rtx).
+Helper tool for [mise](https://github.com/jdx/mise).
 
 ## Installation
 
-rtx-helper can be installed via [rtx](https://github.com/jdxcode/rtx). See https://github.com/ngyewch/rtx-helper-plugin
+mise-helper can be installed via [mise](https://github.com/jdx/mise). See https://github.com/ngyewch/mise-helper-plugin
 
 ## Features
 
 ### Install (recursive)
 
 ```
-rtx-helper install
+mise-helper install
 ```
 
 ### Latest version (recursive)
 
 ```
-rtx-helper latest
+mise-helper latest
 ```
 
-Version constraints can be specified in `.rtx-helper.toml`. See https://github.com/Masterminds/semver for more details.
+Version constraints can be specified in `.mise-helper.toml`. See https://github.com/Masterminds/semver for more details.
 
 ```
 [constraints]

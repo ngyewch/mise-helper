@@ -1,4 +1,4 @@
-package rtx
+package mise
 
 import (
 	"github.com/stretchr/testify/assert"

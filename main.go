@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/ngyewch/rtx-helper/cmd"
+	"github.com/ngyewch/mise-helper/cmd"
 )
 
 func main() {

@@ -2,18 +2,18 @@ package helper
 
 import (
 	"github.com/denormal/go-gitignore"
-	"github.com/ngyewch/rtx-helper/rtx"
+	"github.com/ngyewch/mise-helper/mise"
 	"os"
 	"path/filepath"
 )
 
-func walkDirectories(recursive bool, handler func(rtxHelper *rtx.Helper, rtxDirHelper *rtx.DirHelper, path string) error) error {
+func walkDirectories(recursive bool, handler func(miseHelper *mise.Helper, miseDirHelper *mise.DirHelper, path string) error) error {
 	ignore, err := gitignore.NewRepository(".")
 	if err != nil {
 		return err
 	}
 
-	helper, err := rtx.NewHelper()
+	helper, err := mise.NewHelper()
 	if err != nil {
 		return err
 	}
@@ -41,7 +41,7 @@ func walkDirectories(recursive bool, handler func(rtxHelper *rtx.Helper, rtxDirH
 				return err
 			}
 			if f {
-				dirHelper := rtx.NewDirHelper(path)
+				dirHelper := mise.NewDirHelper(path)
 				err = handler(helper, dirHelper, path)
 				if err != nil {
 					return err

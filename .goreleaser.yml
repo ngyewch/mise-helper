@@ -1,4 +1,4 @@
-project_name: rtx-helper
+project_name: mise-helper
 before:
   hooks:
     - go mod download

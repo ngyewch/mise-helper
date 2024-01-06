@@ -1,4 +1,4 @@
-package rtx
+package mise
 
 import (
 	"bufio"
@@ -32,31 +32,31 @@ type Helper struct {
 }
 
 func NewHelper() (*Helper, error) {
-	rtxDefaultConfigFilename := os.Getenv("RTX_DEFAULT_CONFIG_FILENAME")
-	if rtxDefaultConfigFilename == "" {
-		rtxDefaultConfigFilename = ".rtx.toml"
+	miseDefaultConfigFilename := os.Getenv("MISE_DEFAULT_CONFIG_FILENAME")
+	if miseDefaultConfigFilename == "" {
+		miseDefaultConfigFilename = ".mise.toml"
 	}
 
-	rtxDefaultToolVersionsFilename := os.Getenv("RTX_DEFAULT_TOOL_VERSIONS_FILENAME")
-	if rtxDefaultToolVersionsFilename == "" {
-		rtxDefaultToolVersionsFilename = ".tool-versions"
+	miseDefaultToolVersionsFilename := os.Getenv("MISE_DEFAULT_TOOL_VERSIONS_FILENAME")
+	if miseDefaultToolVersionsFilename == "" {
+		miseDefaultToolVersionsFilename = ".tool-versions"
 	}
 
-	rtxLegacyVersionFile := os.Getenv("RTX_LEGACY_VERSION_FILE")
-	legacyVersionFile := (rtxLegacyVersionFile == "") || (rtxLegacyVersionFile == "1")
+	miseLegacyVersionFile := os.Getenv("MISE_LEGACY_VERSION_FILE")
+	legacyVersionFile := (miseLegacyVersionFile == "") || (miseLegacyVersionFile == "1")
 
-	rtxLegacyVersionFileDisableTools := strings.TrimSpace(os.Getenv("RTX_LEGACY_VERSION_FILE_DISABLE_TOOLS"))
+	miseLegacyVersionFileDisableTools := strings.TrimSpace(os.Getenv("MISE_LEGACY_VERSION_FILE_DISABLE_TOOLS"))
 	var legacyVersionFileDisableTools []string
-	if rtxLegacyVersionFileDisableTools != "" {
-		legacyVersionFileDisableTools = strings.Split(rtxLegacyVersionFileDisableTools, ",")
+	if miseLegacyVersionFileDisableTools != "" {
+		legacyVersionFileDisableTools = strings.Split(miseLegacyVersionFileDisableTools, ",")
 		for i := 0; i < len(legacyVersionFileDisableTools); i++ {
 			legacyVersionFileDisableTools[i] = strings.TrimSpace(legacyVersionFileDisableTools[i])
 		}
 	}
 
 	return &Helper{
-		DefaultConfigFilename:         rtxDefaultConfigFilename,
-		DefaultToolVersionsFilename:   rtxDefaultToolVersionsFilename,
+		DefaultConfigFilename:         miseDefaultConfigFilename,
+		DefaultToolVersionsFilename:   miseDefaultToolVersionsFilename,
 		LegacyVersionFile:             legacyVersionFile,
 		LegacyVersionFileDisableTools: legacyVersionFileDisableTools,
 	}, nil
@@ -105,7 +105,7 @@ func (helper *Helper) HasVersionFiles(path string) (bool, error) {
 }
 
 func (helper *Helper) ListAvailable(name string) ([]*ToolVersion, error) {
-	cmd := exec.Command("rtx", "ls-remote", name)
+	cmd := exec.Command("mise", "ls-remote", name)
 	buf := bytes.NewBuffer(nil)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = buf

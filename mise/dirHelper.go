@@ -1,4 +1,4 @@
-package rtx
+package mise
 
 import (
 	"bytes"
@@ -33,7 +33,7 @@ func NewDirHelper(path string) *DirHelper {
 }
 
 func (helper *DirHelper) InstallAll() error {
-	cmd := exec.Command("rtx", "install")
+	cmd := exec.Command("mise", "install")
 	cmd.Dir = helper.path
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -50,7 +50,7 @@ func (helper *DirHelper) InstallAll() error {
 }
 
 func (helper *DirHelper) ListInstalled() (*ListAllResponse, error) {
-	cmd := exec.Command("rtx", "list", "--json")
+	cmd := exec.Command("mise", "list", "--json")
 	cmd.Dir = helper.path
 	buf := bytes.NewBuffer(nil)
 	cmd.Stdin = os.Stdin

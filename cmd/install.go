@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/ngyewch/rtx-helper/helper"
+	"github.com/ngyewch/mise-helper/helper"
 	"github.com/spf13/cobra"
 )
 

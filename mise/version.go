@@ -1,4 +1,4 @@
-package rtx
+package mise
 
 import (
 	"github.com/Masterminds/semver/v3"

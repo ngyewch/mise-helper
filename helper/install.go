@@ -2,13 +2,13 @@ package helper
 
 import (
 	"fmt"
-	"github.com/ngyewch/rtx-helper/rtx"
+	"github.com/ngyewch/mise-helper/mise"
 )
 
 func Install(recursive bool) error {
-	return walkDirectories(recursive, func(rtxHelper *rtx.Helper, rtxDirHelper *rtx.DirHelper, path string) error {
+	return walkDirectories(recursive, func(miseHelper *mise.Helper, miseDirHelper *mise.DirHelper, path string) error {
 		fmt.Println(path)
-		err := rtxDirHelper.InstallAll()
+		err := miseDirHelper.InstallAll()
 		if err != nil {
 			return err
 		}

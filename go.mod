@@ -1,4 +1,4 @@
-module github.com/ngyewch/rtx-helper
+module github.com/ngyewch/mise-helper
 
 go 1.21
 

@@ -1,5 +1,5 @@
 package cmd
 
 const (
-	AppName = "rtx-helper"
+	AppName = "mise-helper"
 )
