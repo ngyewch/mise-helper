@@ -8,6 +8,7 @@ import (
 var (
 	versionPrefixLocatorRegex1 = regexp.MustCompile(`^[0-9]`)
 	versionPrefixLocatorRegex2 = regexp.MustCompile(`-[0-9]`)
+	versionPrefixLocatorRegex3 = regexp.MustCompile(`^v[0-9]`)
 )
 
 type ToolVersion struct {
@@ -31,6 +32,18 @@ func NewToolVersion(version string) *ToolVersion {
 	versionPrefixLocation = versionPrefixLocatorRegex2.FindStringIndex(version)
 	if versionPrefixLocation != nil {
 		versionPrefix := version[0:versionPrefixLocation[0]]
+		versionNumber := version[versionPrefixLocation[0]+1:]
+		v, _ := semver.NewVersion(versionNumber)
+		return &ToolVersion{
+			Version:       version,
+			VersionPrefix: versionPrefix,
+			VersionNumber: versionNumber,
+			SemVer:        v,
+		}
+	}
+	versionPrefixLocation = versionPrefixLocatorRegex3.FindStringIndex(version)
+	if versionPrefixLocation != nil {
+		versionPrefix := "v"
 		versionNumber := version[versionPrefixLocation[0]+1:]
 		v, _ := semver.NewVersion(versionNumber)
 		return &ToolVersion{

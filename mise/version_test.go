@@ -26,6 +26,10 @@ func TestToolVersion(t *testing.T) {
 		toolVersion := NewToolVersion("7.27.0-0")
 		expectToolVersion(t, toolVersion, true, "", "7.27.0-0", "0")
 	}
+	{
+		toolVersion := NewToolVersion("v0.9.0")
+		expectToolVersion(t, toolVersion, true, "v", "0.9.0", "")
+	}
 }
 
 func expectToolVersion(t *testing.T, toolVersion *ToolVersion, expectedValid bool, expectedVersionPrefix string, expectedVersionNumber string, expectedPrerelease string) {
