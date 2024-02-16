@@ -14,8 +14,4 @@ tasks:
   dependencyUpdates:
     desc: Show dependency updates
     cmds:
-      - go list -u -m -json all | docker run --rm -i psampaz/go-mod-outdated -update -direct
-
-  build-via-earthly:
-    cmds:
-      - earthly --artifact +build/* dist/output/ --VERSION=$(git describe --tags --dirty)
+      - go list -u -m -json all | go-mod-outdated -update -direct
