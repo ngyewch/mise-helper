@@ -14,11 +14,15 @@ type DirHelper struct {
 
 type ListAllResponse map[string][]*Listing
 
+type ListMissingResponse map[string][]*Listing
+
 type Listing struct {
 	Version          string  `json:"version"`
 	RequestedVersion string  `json:"requested_version,omitempty"`
 	InstallPath      string  `json:"install_path,omitempty"`
 	Source           *Source `json:"source,omitempty"`
+	Installed        bool    `json:"installed"`
+	Active           bool    `json:"active"`
 }
 
 type Source struct {
@@ -106,6 +110,35 @@ func (helper *DirHelper) ListInstalled() (*ListAllResponse, error) {
 		}
 	}
 	var result ListAllResponse
+	err = json.Unmarshal(buf.Bytes(), &result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+func (helper *DirHelper) ListMissing() (*ListMissingResponse, error) {
+	envEntries, err := helper.getEnv()
+	if err != nil {
+		return nil, err
+	}
+
+	cmd := exec.Command("mise", "list", "--json", "--current", "--missing")
+	cmd.Dir = helper.path
+	buf := bytes.NewBuffer(nil)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = buf
+	cmd.Stderr = os.Stderr
+	cmd.Env = envEntries
+	err = cmd.Run()
+	if (cmd.ProcessState != nil) && (cmd.ProcessState.ExitCode() != 0) {
+		fmt.Printf("exit code = %d\n", cmd.ProcessState.ExitCode())
+	} else {
+		if err != nil {
+			return nil, err
+		}
+	}
+	var result ListMissingResponse
 	err = json.Unmarshal(buf.Bytes(), &result)
 	if err != nil {
 		return nil, err
