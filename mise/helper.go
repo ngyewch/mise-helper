@@ -3,7 +3,6 @@ package mise
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -111,17 +110,19 @@ func (helper *Helper) ListAvailable(name string) ([]*ToolVersion, error) {
 	cmd.Stdout = buf
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
-	if (cmd.ProcessState != nil) && (cmd.ProcessState.ExitCode() != 0) {
-		fmt.Printf("exit code = %d\n", cmd.ProcessState.ExitCode())
-	} else {
-		if err != nil {
-			return nil, err
-		}
+	if err != nil {
+		return nil, err
 	}
 	var versions []*ToolVersion
 	scanner := bufio.NewScanner(buf)
 	for scanner.Scan() {
 		version := scanner.Text()
+		// HACK special handling for go versions
+		if strings.HasPrefix(name, "go:") {
+			if strings.HasPrefix(version, "v") {
+				version = version[1:]
+			}
+		}
 		versions = append(versions, NewToolVersion(version))
 	}
 	return versions, nil

@@ -28,7 +28,7 @@ func TestToolVersion(t *testing.T) {
 	}
 	{
 		toolVersion := NewToolVersion("v0.9.0")
-		expectToolVersion(t, toolVersion, true, "v", "0.9.0", "")
+		expectToolVersion(t, toolVersion, false, "", "", "")
 	}
 }
 
