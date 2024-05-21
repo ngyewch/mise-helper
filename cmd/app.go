@@ -1,14 +1,16 @@
 package cmd
 
 import (
+	"github.com/carlmjohnson/versioninfo"
 	"github.com/urfave/cli/v2"
 )
 
 var (
 	app = &cli.App{
-		Name:   "mise-helper",
-		Usage:  "mise helper",
-		Action: nil,
+		Name:    "mise-helper",
+		Usage:   "mise helper",
+		Version: versioninfo.Version,
+		Action:  nil,
 		Commands: []*cli.Command{
 			installCmd,
 			latestCmd,
