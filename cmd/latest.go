@@ -2,39 +2,38 @@ package cmd
 
 import (
 	"github.com/ngyewch/mise-helper/helper"
-	"github.com/spf13/cobra"
+	"github.com/urfave/cli/v2"
 )
 
 var (
-	latestCmd = &cobra.Command{
-		Use:  "latest",
-		RunE: latest,
+	latestCmd = &cli.Command{
+		Name:   "latest",
+		Usage:  "Show latest versions recursively",
+		Action: latest,
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:  "hide-latest",
+				Usage: "do not print tools already at the latest version",
+				Value: true,
+			},
+			&cli.BoolFlag{
+				Name:  "include-prereleases",
+				Usage: "include prereleases",
+				Value: false,
+			},
+			&cli.BoolFlag{
+				Name:  "recursive",
+				Usage: "run recursively",
+				Value: true,
+			},
+		},
 	}
 )
 
-func latest(cmd *cobra.Command, args []string) error {
-	hideLatest, err := cmd.Flags().GetBool("hide-latest")
-	if err != nil {
-		return err
-	}
-
-	includePrereleases, err := cmd.Flags().GetBool("include-prereleases")
-	if err != nil {
-		return err
-	}
-
-	recursive, err := cmd.Flags().GetBool("recursive")
-	if err != nil {
-		return err
-	}
+func latest(cCtx *cli.Context) error {
+	hideLatest := cCtx.Bool("hide-latest")
+	includePrereleases := cCtx.Bool("include-prereleases")
+	recursive := cCtx.Bool("recursive")
 
 	return helper.Latest(hideLatest, includePrereleases, recursive)
-}
-
-func init() {
-	latestCmd.Flags().Bool("hide-latest", false, "do not print tools already at the latest version")
-	latestCmd.Flags().Bool("include-prereleases", false, "include prereleases")
-	latestCmd.Flags().Bool("recursive", true, "run recursively")
-
-	rootCmd.AddCommand(latestCmd)
 }

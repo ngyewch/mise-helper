@@ -2,27 +2,26 @@ package cmd
 
 import (
 	"github.com/ngyewch/mise-helper/helper"
-	"github.com/spf13/cobra"
+	"github.com/urfave/cli/v2"
 )
 
 var (
-	installCmd = &cobra.Command{
-		Use:  "install",
-		RunE: install,
+	installCmd = &cli.Command{
+		Name:   "install",
+		Usage:  "Install recursively",
+		Action: install,
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:  "recursive",
+				Usage: "run recursively",
+				Value: true,
+			},
+		},
 	}
 )
 
-func install(cmd *cobra.Command, args []string) error {
-	recursive, err := cmd.Flags().GetBool("recursive")
-	if err != nil {
-		return err
-	}
+func install(cCtx *cli.Context) error {
+	recursive := cCtx.Bool("recursive")
 
 	return helper.Install(recursive)
-}
-
-func init() {
-	installCmd.Flags().Bool("recursive", true, "run recursively")
-
-	rootCmd.AddCommand(installCmd)
 }
