@@ -1,10 +1,9 @@
 module github.com/ngyewch/mise-helper
 
-go 1.23
+go 1.21
 
 require (
 	github.com/Masterminds/semver/v3 v3.3.1
-	github.com/carlmjohnson/versioninfo v0.22.5
 	github.com/denormal/go-gitignore v0.0.0-20180930084346-ae8ad1d07817
 	github.com/pelletier/go-toml v1.9.5
 	github.com/stretchr/testify v1.10.0
