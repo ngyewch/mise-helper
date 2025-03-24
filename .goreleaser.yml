@@ -22,7 +22,8 @@ builds:
       - -X github.com/ngyewch/go-versioninfo/v.CommitTimestamp={{ if index .Env "COMMIT_TIMESTAMP" }}{{ .Env.COMMIT_TIMESTAMP }}{{ end }}
 archives:
   - name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    format: zip
+    formats:
+      - zip
 checksum:
   name_template: 'checksums.txt'
 changelog:
