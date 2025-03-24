@@ -3,8 +3,10 @@ package mise
 import (
 	"bufio"
 	"bytes"
+	"github.com/adrg/xdg"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -23,46 +25,57 @@ var (
 	}
 )
 
+const (
+	defaultConfigFilename        = ".mise.toml"
+	defaultToolVersionsFilename  = ".tool-versions"
+	defaultMiseLegacyVersionFile = "1"
+)
+
 type Helper struct {
-	DefaultConfigFilename         string
-	DefaultToolVersionsFilename   string
+	ConfigDir                     string
+	GlobalConfigFile              string
+	ConfigFilename                string
+	ToolVersionsFilename          string
 	LegacyVersionFile             bool
 	LegacyVersionFileDisableTools []string
 }
 
-func NewHelper() (*Helper, error) {
-	miseDefaultConfigFilename := os.Getenv("MISE_DEFAULT_CONFIG_FILENAME")
-	if miseDefaultConfigFilename == "" {
-		miseDefaultConfigFilename = ".mise.toml"
+func getEnvWithDefault(name string, defaultValue string) string {
+	value := os.Getenv(name)
+	if value != "" {
+		return value
+	} else {
+		return defaultValue
 	}
+}
 
-	miseDefaultToolVersionsFilename := os.Getenv("MISE_DEFAULT_TOOL_VERSIONS_FILENAME")
-	if miseDefaultToolVersionsFilename == "" {
-		miseDefaultToolVersionsFilename = ".tool-versions"
-	}
-
-	miseLegacyVersionFile := os.Getenv("MISE_LEGACY_VERSION_FILE")
-	legacyVersionFile := (miseLegacyVersionFile == "") || (miseLegacyVersionFile == "1")
-
-	miseLegacyVersionFileDisableTools := strings.TrimSpace(os.Getenv("MISE_LEGACY_VERSION_FILE_DISABLE_TOOLS"))
-	var legacyVersionFileDisableTools []string
-	if miseLegacyVersionFileDisableTools != "" {
-		legacyVersionFileDisableTools = strings.Split(miseLegacyVersionFileDisableTools, ",")
-		for i := 0; i < len(legacyVersionFileDisableTools); i++ {
-			legacyVersionFileDisableTools[i] = strings.TrimSpace(legacyVersionFileDisableTools[i])
+func getEnvStringArrayWithDefault(name string, defaultValue []string) []string {
+	value := os.Getenv(name)
+	if value != "" {
+		parts := strings.Split(value, ",")
+		for i := 0; i < len(parts); i++ {
+			parts[i] = strings.TrimSpace(parts[i])
 		}
+		return parts
+	} else {
+		return defaultValue
 	}
+}
 
+func NewHelper() (*Helper, error) {
+	configDir := getEnvWithDefault("MISE_CONFIG_DIR", path.Join(xdg.ConfigHome, "mise"))
 	return &Helper{
-		DefaultConfigFilename:         miseDefaultConfigFilename,
-		DefaultToolVersionsFilename:   miseDefaultToolVersionsFilename,
-		LegacyVersionFile:             legacyVersionFile,
-		LegacyVersionFileDisableTools: legacyVersionFileDisableTools,
+		ConfigDir:                     configDir,
+		GlobalConfigFile:              getEnvWithDefault("MISE_GLOBAL_CONFIG_FILE", path.Join(configDir, "config.toml")),
+		ConfigFilename:                getEnvWithDefault("MISE_DEFAULT_CONFIG_FILENAME", defaultConfigFilename),
+		ToolVersionsFilename:          getEnvWithDefault("MISE_DEFAULT_TOOL_VERSIONS_FILENAME", defaultToolVersionsFilename),
+		LegacyVersionFile:             getEnvWithDefault("MISE_LEGACY_VERSION_FILE", defaultMiseLegacyVersionFile) == "1",
+		LegacyVersionFileDisableTools: getEnvStringArrayWithDefault("MISE_LEGACY_VERSION_FILE_DISABLE_TOOLS", nil),
 	}, nil
 }
 
 func (helper *Helper) HasVersionFiles(path string) (bool, error) {
-	f, err := hasFile(path, helper.DefaultConfigFilename)
+	f, err := hasFile(path, helper.ConfigFilename)
 	if err != nil {
 		return false, err
 	}
@@ -70,7 +83,7 @@ func (helper *Helper) HasVersionFiles(path string) (bool, error) {
 		return true, nil
 	}
 
-	f, err = hasFile(path, helper.DefaultToolVersionsFilename)
+	f, err = hasFile(path, helper.ToolVersionsFilename)
 	if err != nil {
 		return false, err
 	}
