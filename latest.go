@@ -5,35 +5,11 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-var (
-	latestCmd = &cli.Command{
-		Name:   "latest",
-		Usage:  "Show latest versions recursively",
-		Action: latest,
-		Flags: []cli.Flag{
-			&cli.BoolFlag{
-				Name:  "hide-latest",
-				Usage: "do not print tools already at the latest version",
-				Value: true,
-			},
-			&cli.BoolFlag{
-				Name:  "include-prereleases",
-				Usage: "include prereleases",
-				Value: false,
-			},
-			&cli.BoolFlag{
-				Name:  "recursive",
-				Usage: "run recursively",
-				Value: true,
-			},
-		},
-	}
-)
-
 func latest(cCtx *cli.Context) error {
-	hideLatest := cCtx.Bool("hide-latest")
-	includePrereleases := cCtx.Bool("include-prereleases")
-	recursive := cCtx.Bool("recursive")
+	hideLatest := hideLatestFlag.Get(cCtx)
+	includePrereleases := includePrereleasesFlag.Get(cCtx)
+	recursive := recursiveFlag.Get(cCtx)
+	includeGlobal := includeGlobalFlag.Get(cCtx)
 
-	return helper.Latest(hideLatest, includePrereleases, recursive)
+	return helper.Latest(hideLatest, includePrereleases, recursive, includeGlobal)
 }
