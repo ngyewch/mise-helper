@@ -3,12 +3,12 @@ module github.com/ngyewch/mise-helper
 go 1.23
 
 require (
-	github.com/Masterminds/semver/v3 v3.3.0
+	github.com/Masterminds/semver/v3 v3.3.1
 	github.com/carlmjohnson/versioninfo v0.22.5
 	github.com/denormal/go-gitignore v0.0.0-20180930084346-ae8ad1d07817
 	github.com/pelletier/go-toml v1.9.5
-	github.com/stretchr/testify v1.9.0
-	github.com/urfave/cli/v2 v2.27.5
+	github.com/stretchr/testify v1.10.0
+	github.com/urfave/cli/v2 v2.27.6
 )
 
 require (
