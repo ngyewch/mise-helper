@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/urfave/cli/v2"
+	"context"
+	"github.com/urfave/cli/v3"
 	"log"
 	"os"
 )
@@ -50,7 +51,7 @@ var (
 		},
 	}
 
-	app = &cli.App{
+	app = &cli.Command{
 		Name:    "mise-helper",
 		Usage:   "mise helper",
 		Version: version,
@@ -62,7 +63,7 @@ var (
 )
 
 func main() {
-	err := app.Run(os.Args)
+	err := app.Run(context.Background(), os.Args)
 	if err != nil {
 		log.Fatal(err)
 	}
