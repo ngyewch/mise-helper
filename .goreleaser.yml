@@ -2,9 +2,8 @@ version: 2
 project_name: mise-helper
 before:
   hooks:
-    - go mod download
-    - go mod tidy
     - go generate ./...
+    - go mod tidy
 builds:
   - env:
       - CGO_ENABLED=0
